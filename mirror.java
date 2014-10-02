@@ -19,7 +19,6 @@ public class mirror {
 			int lineLength = line.length();
 			char currChar;
 			String result = "";
-			
 			boolean breakLoop = false;
 			
 			for (int i = lineLength - 1; i >= 0; --i) {
