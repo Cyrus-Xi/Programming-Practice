@@ -1,7 +1,7 @@
 /* 2010 Problem E: Mirror, Mirror on the Wall.
- * Take list of votes and determine outcome.
- * 
- * By David Newton and Cyrus Xi.
+ *
+ * "Given a particular sequence of letters, you are to determine its 
+ * mirror image or to note that it is invalid."
  */
 
 import java.io.*;
@@ -40,6 +40,7 @@ public class mirror {
 					case 'q':
 						result += "p";
 						break;
+					// Mirror images of themselves.
 					case 'i':
 					case 'o':
 					case 'v':
@@ -47,6 +48,7 @@ public class mirror {
 					case 'x':
 						result += Character.toString(currChar);
 						break;
+					// Else mirror image is not legitimate sequence.
 					default:
 						result = "INVALID";
 						breakLoop = true;

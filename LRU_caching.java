@@ -1,13 +1,12 @@
 /* 2012 Problem F: LRU Caching.
+ *
  * Simulate LRU caching.
- * 
- * By David Newton and Cyrus Xi.
  */
 
 import java.io.*;
 import java.util.*;
 
-class LRU_caching {
+public class LRU_caching {
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner scanner = new Scanner(new File("lru.in"));
 		Scanner intReader = new Scanner(new File("lru.in"));

@@ -1,7 +1,6 @@
 /* 2010 Problem A: Judges' Time Calculation.
+ *
  * Output table to determine elapsed time for submissions.
- * 
- * By Daniel Graham, David Newton and Cyrus Xi.
  */
 
 import java.io.*;
@@ -35,12 +34,14 @@ public class calc {
 				System.out.printf("%2d:XX | XX\n", startHr);
 			}
 			int numHrs = durationHr;
+			// Handle edge case.
 			if ( (startMin + durationMin) >= 60 ) {
 				numHrs++;
 			}
 			int realHr = startHr;
 			boolean isPastTwelve = false;
 			for (int j = 1; j <= numHrs; ++j) {
+				// Handle the hour wrapping around after 12.
 				realHr++;
 				if (realHr > 12) {
 					isPastTwelve = true;
