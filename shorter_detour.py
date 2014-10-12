@@ -18,13 +18,13 @@ def get_shorter_detour(ptA, ptB, ptC, ptD):
     :return:    the tuple of the 4 pts in the shorter detour's order
     """
     # Flatten list of tuple points into list of coordinates.
-    coords = [coord for point in [ptA, ptB, ptC, ptD]
-              for coord in point]
+    coords = [coord for pt in [ptA, ptB, ptC, ptD] for coord in pt]
 
     # Convert into radians and pack back into point tuples.
-    ptA, ptB, ptC, ptD = [tup for tup in
-                          zip(map(radians, coords)[::2],
+    pts = [tup for tup in zip(map(radians, coords)[::2],
                               map(radians, coords)[1::2])]
+    # Round floats to 3 decimal places.
+    ptA, ptB, ptC, ptD = [(round(pt[0], 3), round(pt[1], 3)) for pt in pts]
 
     # Radius of Earth in miles.
     radius = 3963.2
@@ -32,9 +32,9 @@ def get_shorter_detour(ptA, ptB, ptC, ptD):
     detours = det1, det2 = (ptA, ptC, ptD, ptB), (ptC, ptA, ptB, ptD)
     dist1, dist2 = 0, 0
 
-    for index, detour in enumerate(detours):
+    for index, det in enumerate(detours):
         # Pairwise iterate for simplicity.
-        for (lon1, lat1), (lon2, lat2) in zip(detour[:-1], detour[1:]):
+        for (lon1, lat1), (lon2, lat2) in zip(det[:-1], det[1:]):
             # Use haversine formula.
             dlon = lon2 - lon1
             dlat = lat2 - lat1
