@@ -3,7 +3,7 @@
 from math import radians, cos, sin, asin, sqrt
 
 
-def get_shorter_detour(ptA, ptB, ptC, ptD):
+def get_shorter_distance(ptA, ptB, ptC, ptD):
     """
     Return the shorter detour as a tuple.
 
