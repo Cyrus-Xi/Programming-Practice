@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 """
-Implement a simple web server using low-level libraries.
+A simple web server, which allows for concurrency, implemented with low-level
+libraries.
 
 Responds to GET and HEAD HTTP requests appropriately.
 Sends back appropriate header lines plus requested file content.
@@ -9,6 +10,7 @@ File may be located in subdirectories.
 If file not found, responds with a 404 error.
 Handles multiple connections with threading.
 Also allows connections to stay alive or close themselves.
+User can terminate program by typing 'STOP' in command line.
 Explicitly handles various exceptions / errors.
 
 Uses select library to allow user to pass in multiple port numbers.
