@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 
-"""
-Solution to a Lyft application coding challenge.
-
-Uses the haversine formula to compute which detour is shorter.
-"""
-
 from math import radians, cos, sin, asin, sqrt
 
 
@@ -56,8 +50,6 @@ def get_shorter_detour(ptA, ptB, ptC, ptD):
 
 
 def main():
-    """Testing."""
-
     ptA = 1, 3
     ptB = 3, 7
     ptC = 2, 5
