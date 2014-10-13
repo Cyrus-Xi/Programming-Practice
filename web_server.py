@@ -16,7 +16,7 @@ Uses select library to allow user to pass in multiple port numbers.
 Seems to work correctly: tested threading and multiple ports with
 both web browser and multiple telnet connections.
 
-By Cyrus Xi for CSC 250 Networking.
+By Cyrus Xi.
 """
 
 from socket import socket, AF_INET, SOCK_STREAM, error
@@ -37,10 +37,10 @@ def reply_to_request(connect_socket):
         request = connect_socket.recv(8192)
 
         # Get request type.
-        if request.startswith("GET"):
-            request_type = "GET"
-        elif request.startswith("HEAD"):
-            request_type = "HEAD"
+        if request.startswith('GET'):
+            request_type = 'GET'
+        elif request.startswith('HEAD'):
+            request_type = 'HEAD'
         else:
             print 'Request must be either a GET or HEAD.'
             continue
@@ -71,7 +71,7 @@ def reply_to_request(connect_socket):
             connect_socket.send('\r\n')
 
             # Send file's contents if GET request.
-            if request_type == "GET":
+            if request_type == 'GET':
                 for byte in out:
                     connect_socket.send(byte)
 
@@ -134,7 +134,7 @@ def main():
                     start_new_thread(reply_to_request, (connection_socket,))
                 # Explicitly handle keyboard interrupt.
                 except KeyboardInterrupt:
-                    print "\nOk, exiting!"
+                    print '\nOk, exiting!'
                     # If connection_socket extant, close.
                     if connection_socket:
                         connection_socket.close()
