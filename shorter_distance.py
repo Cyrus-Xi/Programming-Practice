@@ -1,40 +1,56 @@
 #!/usr/bin/env python
 
+"""
+Adapted from shorter_detour to be more general.
+
+Returns the shorter route. Each route can contain an
+arbitary number of longitude-latitude point tuples.
+
+By Cyrus Xi.
+"""
+
 from math import radians, cos, sin, asin, sqrt
 
 
-def get_shorter_distance(ptA, ptB, ptC, ptD):
+def get_shorter_distance(route1, route2):
     """
-    Return the shorter detour as a tuple.
+    Return the shorter route.
 
-    Specifically, shorter detour means whether it's a shorter
-    distance to go from A to C to D to B or whether shorter to go
-    from C to A to B to D.
+    Each route is a tuple containing point tuples of longitude
+    and latitude. Uses the haversine formula.
 
-    :param ptA: a tuple of latitude and longitude representing point A
-    :param ptB: a tuple of latitude and longitude representing point B
-    :param ptC: a tuple of latitude and longitude representing point C
-    :param ptD: a tuple of latitude and longitude representing point D
-    :return:    the tuple of the 4 pts in the shorter detour's order
+    :param route1 tuple that contains lon-lat point tuples
+    :param route2 tuple that contains lon-lat point tuples
+    :return:      the tuple that represents the shorter route
     """
-    # Flatten list of tuple points into list of coordinates.
-    coords = [coord for pt in [ptA, ptB, ptC, ptD] for coord in pt]
+    # Save more reader-friendly versions for output later.
+    out_rt1, out_rt2 = route1, route2
 
-    # Convert into radians and pack back into point tuples.
-    pts = [tup for tup in zip(map(radians, coords)[::2],
-                              map(radians, coords)[1::2])]
-    # Round floats to 3 decimal places.
-    ptA, ptB, ptC, ptD = [(round(pt[0], 3), round(pt[1], 3)) for pt in pts]
+    # For each route.
+    for index, route in enumerate([route1, route2]):
+        # Flatten list of tuple points into list of coordinates.
+        coords = [coord for pt in route for coord in pt]
+        # Convert into radians and pack back into point tuples.
+        pts = [pt for pt in zip(map(radians, coords)[::2],
+                                map(radians, coords)[1::2])]
+        # Round floats to 3 decimal places.
+        pts = [(round(pt[0], 3), round(pt[1], 3)) for pt in pts]
+        # Put back into route tuple.
+        if index == 0:
+            route1 = pts
+        else:
+            assert index == 1
+            route2 = pts
 
     # Radius of Earth in miles.
     radius = 3963.2
 
-    detours = det1, det2 = (ptA, ptC, ptD, ptB), (ptC, ptA, ptB, ptD)
+    routes = route1, route2
     dist1, dist2 = 0, 0
 
-    for index, det in enumerate(detours):
+    for index, route in enumerate(routes):
         # Pairwise iterate for simplicity.
-        for (lon1, lat1), (lon2, lat2) in zip(det[:-1], det[1:]):
+        for (lon1, lat1), (lon2, lat2) in zip(route[:-1], route[1:]):
             # Use haversine formula.
             dlon = lon2 - lon1
             dlat = lat2 - lat1
@@ -46,16 +62,23 @@ def get_shorter_distance(ptA, ptB, ptC, ptD):
             else:
                 dist2 += dist
 
-    return det1 if dist1 < dist2 else det2
+    return out_rt1 if dist1 < dist2 else out_rt2
 
 
 def main():
+    """Testing."""
     ptA = 1, 3
     ptB = 3, 7
     ptC = 2, 5
     ptD = 1, 6
+    route1 = (ptA, ptB, ptC, ptD)
 
-    print get_shorter_detour(ptA, ptB, ptC, ptD)
+    ptE = 1, 8
+    ptF = 2, 3
+    ptG = 4, 2
+    route2 = (ptE, ptF, ptG)
+
+    print get_shorter_distance(route1, route2)
 
 
 if __name__ == '__main__':
