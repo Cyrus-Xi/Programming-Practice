@@ -1,7 +1,7 @@
-/* 2014 Practice: Problem A
+/* 2009 Problem A
  * The Navi-Computer is Down!
  * 
- * By David Newton & Cyrus Xi.
+ * By Cyrus Xi.
  */
 
 import java.io.*;
