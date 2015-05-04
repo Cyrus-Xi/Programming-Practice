@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# Challenge description: 
+# You are given a prefix expression. Write a program which evaluates it.
+
 import fileinput
 
 def evaluate(expression):
@@ -43,4 +46,3 @@ def evaluate(expression):
     
 for index, line in enumerate(fileinput.input()):
 	evaluate(line)
-
