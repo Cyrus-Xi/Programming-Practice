@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 def rect_intersect(r1, r2):
     lx_1, by_1, w_1, h_1 = r1['left_x'], r1['bottom_y'], r1['width'], r1['height']
     lx_2, by_2, w_2, h_2 = r2['left_x'], r2['bottom_y'], r2['width'], r2['height']

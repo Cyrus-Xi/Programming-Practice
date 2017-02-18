@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+
 class TempTracker:
-    """Optimize for time and space complexity. 
+    """Optimize for time and space complexity by precomputing variance values.
     
     All methods are O(1) running time and O(1) space (assuming realistically bounded input).
     """
