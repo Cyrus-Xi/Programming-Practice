@@ -12,15 +12,13 @@ class MyQueue(object):
 
     def pop(self):
         """Remove the element from in front of queue and return that element."""
-        if not self.out_stack:
-            while self.in_stack:
-                self.out_stack.append(self.in_stack.pop())
-            return self.out_stack.pop()
+        self.peek()
         return self.out_stack.pop()
 
     def peek(self):
         """Get the front element."""
         if not self.out_stack:
+            # Flip ordering.
             while self.in_stack:
                 self.out_stack.append(self.in_stack.pop())
             return self.out_stack[-1]
