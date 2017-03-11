@@ -7,6 +7,8 @@ def maxSubArray(self, nums):
     for n in nums[1:]:
         # No max subarray will include a negative sum prefix, because 
         # could have greater sum if just leave prefix off.
+        # So if the current number is greater than the previous sum plus the
+        # current number, don't include the previous sum / start over.
         max_end_here = max(n, max_end_here + n)
         max_so_far = max(max_so_far, max_end_here)
             
