@@ -28,3 +28,4 @@ assert not r.next.next.next
 # Edge cases: empty linked list and single node linked list.
 assert not reverse_ll(None)
 assert reverse_ll(LinkedListNode(5)).value == 5
+print 'Tests passed!'

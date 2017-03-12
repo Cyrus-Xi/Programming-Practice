@@ -28,4 +28,5 @@ b.next = c
 c.next = d
 d.next = e
 
-print kth_to_last_node(3, a).value
+assert kth_to_last_node(3, a).value == 'Cheese'
+print 'Test passed!'
