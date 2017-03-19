@@ -1,0 +1,489 @@
+==> 002_add_two_numbers.py <==
+#!/usr/bin/env python
+
+"""
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+"""
+
+def addTwoNumbers(self, l1, l2):
+    l1_str = ''
+    l2_str = ''
+        
+    while l1.next != None:
+        l1_str += str(l1.val)
+        l1 = l1.next
+    l1_str += str(l1.val)
+        
+    while l2.next != None:
+        l2_str += str(l2.val)
+        l2 = l2.next
+    l2_str += str(l2.val)
+        
+    l1_num, l2_num = int(l1_str[::-1]), int(l2_str[::-1])
+    sum = l1_num + l2_num
+    
+    sum_str_rev = str(sum)[::-1]
+    
+    root = ListNode(0)
+    curr = root
+    for c in sum_str_rev:
+        l_curr = ListNode(int(c))
+        curr.next = l_curr
+        curr = curr.next
+        
+    return root.next
+
+==> 003_longest_substr_without_repeats.py <==
+#!/usr/bin/env python
+
+"""
+Given a string, find the length of the longest substring without repeating characters.
+
+Examples:
+
+Given "abcabcbb", the answer is "abc", which the length is 3.
+
+Given "bbbbb", the answer is "b", with the length of 1.
+
+Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+"""
+
+def lengthOfLongestSubstring(self, s):
+    max_l, arr = 0, []
+    for c in s:
+        if c in arr:
+            # Strip out the arr containing the dupe of c.
+            try: arr = arr[arr.index(c) + 1:]
+            except IndexError: arr = []
+        arr.append(c)
+        max_l = max(max_l, len(arr))
+    return max_l
+
+==> 006_zigzag_conversion.py <==
+#!/usr/bin/env python
+
+"""
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string text, int nRows);
+convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+"""
+
+def convert(self, s, numRows):
+    # The key is that the distance down then up (or up then down) to get to the next letter on the current row is symmetric regardless of the horizontal distance traveled / the diagonal.
+    linenum = 1
+    # N-1 + N-1 (4), Xth line starts w Xth char, N-X + N-X / X-1 + X-1 (down-up or up-down; the distance is the same), 3rd line starts w 3rd char and is X-1 + X-1
+    ret_str = ''
+    ind = 0
+    # Have to alternate strategy for middle lines.
+    mid_cycle_index = 1
+    if numRows == 1: return s
+    for i in xrange(len(s)):
+        ret_str += s[ind]
+        # First line.
+        if linenum == 1:
+            ind += 2 * (numRows - 1)
+        elif linenum == numRows:
+            ind += 2 * (linenum - 1)
+        else:
+            if mid_cycle_index % 2 == 1:
+                ind += 2 * (numRows - linenum)
+            else:
+                ind += 2 * (linenum - 1)
+            mid_cycle_index += 1
+        # Go to next line.
+        if ind >= len(s):
+            linenum += 1
+            ind = linenum - 1  # ind is 0-based, linenum 1-based
+            mid_cycle_index = 1
+    return ret_str
+
+==> 048_rotate_image.py <==
+#!/usr/bin/env python
+
+"""
+You are given an n x n 2D matrix representing an image.
+
+Rotate the image by 90 degrees (clockwise).
+
+Follow up:
+Could you do this in-place?
+"""
+
+def rotate(self, A):
+    # Reverse and transpose.
+    A[:] = zip(*A[::-1])
+
+==> 053_max_subarray.py <==
+#!/usr/bin/env python
+
+def maxSubArray(self, nums):
+    if not nums: return nums
+
+    max_so_far = max_end_here = nums[0]
+    for n in nums[1:]:
+        # No max subarray will include a negative sum prefix, because 
+        # could have greater sum if just leave prefix off.
+        # So if the current number is greater than the previous sum plus the
+        # current number, don't include the previous sum / start over.
+        max_end_here = max(n, max_end_here + n)
+        max_so_far = max(max_so_far, max_end_here)
+            
+    return max_so_far
+
+==> 151_reverse_words_in_a_string.py <==
+#!/usr/bin/env python
+
+"""
+Given an input string, reverse the string word by word.
+
+For example,
+Given s = "the sky is blue",
+return "blue is sky the".
+"""
+
+def reverseWords(self, s):
+    return " ".join(s.split()[::-1])
+
+==> 173_binary_search_tree_iterator.py <==
+#!/usr/bin/env python
+
+"""
+Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
+
+Calling next() will return the next smallest number in the BST.
+
+Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
+"""
+
+class BSTIterator(object):
+    def __init__(self, root):
+        """
+        :type root: TreeNode
+        """
+        self.stk = []
+        self.push_lefts(root)
+        
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        return bool(self.stk)
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        x = self.stk.pop()
+        self.push_lefts(x.right)
+        return x.val
+        
+    def push_lefts(self, node):
+        while node:
+            self.stk.append(node)
+            node = node.left
+
+==> 186_reverse_words_in_a_string_II.py <==
+#!/usr/bin/env python
+
+"""
+Given an input string, reverse the string word by word. A word is defined as a sequence of non-space characters.
+
+The input string does not contain leading or trailing spaces and the words are always separated by a single space.
+
+For example,
+Given s = "the sky is blue",
+return "blue is sky the".
+
+Could you do it in-place without allocating extra space?
+"""
+
+def reverse(arr, l, r):
+    while l < r:
+        arr[l], arr[r] = arr[r], arr[l]
+        l += 1; r -= 1
+    
+def reverseWords(s):
+    """
+    @param s, a list of 1 length strings, e.g., s = ['h','e','l','l','o']
+    @return nothing
+    """
+    n = len(s)
+    l, r = 0, n - 1
+    reverse(s, l, r)
+    # n + 1 because have to reverse the last word.
+    for i in xrange(1, n + 1):
+        if i == n or s[i] == ' ':
+            reverse(s, l, i - 1)
+            l = i + 1
+
+==> 200_number_of_islands.py <==
+#!/usr/bin/env
+
+"""
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. 
+An island is surrounded by water and is formed by connecting adjacent lands horizontally 
+or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example 1:
+
+11110
+11010
+11000
+00000
+Answer: 1
+
+Example 2:
+
+11000
+11000
+00100
+00011
+Answer: 3
+"""
+
+class Solution(object):
+    def numIslands(self, grid):
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        if not grid: return 0
+        
+        island_ct = 0
+        for ri, row in enumerate(grid):
+            for ci, cell in enumerate(row):
+                if cell == '1':
+                    self.dfs(grid, ri, ci)
+                    island_ct += 1
+                    
+        return island_ct
+                    
+    def dfs(self, grid, rowi, coli):
+        offsets = [(-1, 0), (0, -1), (0, 1), (1, 0)]
+        neighbor_indices = [(rowi + i, coli + j) for i, j in offsets]
+        neighbor_indices = [(ri, ci) for ri, ci in neighbor_indices if ri >= 0 and ci >= 0 
+                            and ri < len(grid) and ci < len(grid[0])]
+
+        grid[rowi][coli] = 'x'
+        
+        for i, j in neighbor_indices:
+            if grid[i][j] == '1': self.dfs(grid, i, j)
+
+==> 204_count_primes.py <==
+#!/usr/bin/env
+
+class Solution(object):
+    def countPrimes(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if not n or n <= 2: return 0
+        
+        primes = [True] * n
+        primes[:2] = [False, False]
+        
+        for i in xrange(2, n):
+            if primes[i]:
+                for j in xrange(i, (n-1) / i + 1):
+                    primes[i*j] = False
+                    
+        return sum(primes)
+
+==> 232_queue_with_stacks.py <==
+#!/usr/bin/env python
+
+class MyQueue(object):
+
+    def __init__(self):
+        self.in_stack = []
+        self.out_stack = []
+
+    def push(self, x):
+        """Push element x to the back of queue."""
+        self.in_stack.append(x)
+
+    def pop(self):
+        """Remove the element from in front of queue and return that element."""
+        self.peek()
+        return self.out_stack.pop()
+
+    def peek(self):
+        """Get the front element."""
+        if not self.out_stack:
+            # Flip ordering.
+            while self.in_stack:
+                self.out_stack.append(self.in_stack.pop())
+            return self.out_stack[-1]
+        return self.out_stack[-1]
+
+    def empty(self):
+        """Return whether the queue is empty."""
+        return len(self.in_stack) + len(self.out_stack) == 0
+
+==> 234_palindrome_linked_list.py <==
+#!/usr/bin/env python
+
+def isPalindrome(self, head):
+    """
+    :type head: ListNode
+    :rtype: bool
+    """
+    fast = slow = head
+    
+    # get middle
+    while fast and fast.next:
+        fast = fast.next.next
+        slow = slow.next
+        
+    # handle odd case
+    if fast:
+        slow = slow.next
+    
+    # reverse 2nd half
+    prev = None
+    while slow:
+        nxt = slow.next
+        slow.next = prev
+        prev = slow
+        slow = nxt
+        
+    # compare 
+    while prev:
+        if prev.val != head.val: return False
+        prev, head = prev.next, head.next
+        
+    return True
+
+==> 325_max_size_subarr_sum_k.py <==
+#!/usr/bin/env python
+
+def maxSubArrayLen(self, nums, k):
+    sum_dict = {0: -1}
+    ans = acc = 0
+    for i, num in enumerate(nums):
+        acc += num
+        if acc not in sum_dict: sum_dict[acc] = i
+        if acc-k in sum_dict:
+            ans = max(ans, i - sum_dict[acc-k])
+        
+    return ans
+
+==> 348_design_tic_tac_toe.py <==
+class TicTacToe(object):
+
+    def __init__(self, n):
+        """
+        Initialize your data structure here.
+        :type n: int
+        """
+        self.n = n
+        self.rows = [[0] * n, [0] * n]
+        self.cols = [[0] * n, [0] * n]
+        self.d1 = [0, 0]
+        self.d2 = [0, 0]
+
+    def move(self, row, col, player):
+        """
+        Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins.
+        :type row: int
+        :type col: int
+        :type player: int
+        :rtype: int
+        """
+        p = player - 1
+        self.rows[p][row] += 1
+        self.cols[p][col] += 1
+        # Increment diagonals, both if middle cell (e.g., if n = 5, (2, 2)).
+        if row == col: self.d1[p] += 1
+        if row + col == self.n - 1: self.d2[p] += 1
+            
+        return (player if any(x[i] == self.n for x, i in zip((self.rows[p], self.cols[p]), (row, col)))
+                            or self.d1[p] == self.n or self.d2[p] == self.n
+                            else 0)
+
+==> 445_add_two_numbers_II.py <==
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+#
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        c1, c2 = l1, l2
+        h1, h2 = c1, c2
+        p1, p2 = None, None
+        ct1 = ct2 = 0
+        
+        # Reverse lists so can start with least significant digit.
+        while c1:
+            ct1 += 1
+            nxt = c1.next
+            c1.next = p1
+            if not nxt: break
+            p1, c1 = c1, nxt
+        while c2:
+            ct2 += 1
+            nxt = c2.next
+            c2.next = p2
+            if not nxt: break
+            p2, c2 = c2, nxt
+
+        # Left fill shorter list with 0s.
+        shorter = h1 if ct1 < ct2 else h2 if ct2 < ct1 else 0
+        if shorter:
+            for i in xrange(abs(ct1 - ct2)):
+                shorter.next = ListNode(0)
+                shorter = shorter.next
+        
+        # Get sum linked list.
+        carry = 0
+        a = c3 = ListNode(0)
+        while c1 and c2:
+            v = c1.val + c2.val
+            if carry: 
+                v += carry
+                carry = 0
+            if v > 9:
+                v -= 10
+                carry = 1
+            c3.next = ListNode(v)
+            c1, c2, c3 = c1.next, c2.next, c3.next
+        
+        # Add carry node.
+        if carry: c3.next = ListNode(1)
+        
+        # Reverse sum linked list so most significant digit is first.
+        p3, ans = None, a.next
+        while ans:
+            nxt = ans.next
+            ans.next = p3
+            if not nxt: break
+            p3, ans = ans, nxt
+
+        return ans
