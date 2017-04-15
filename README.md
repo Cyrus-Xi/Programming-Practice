@@ -1,1 +1,1 @@
-Miscellaneous code snippets written for personal education/curiosity and or scripts to make life a little bit easier.
+Programming practice, random code snippets, and coding interview prep problems.
