@@ -1,3 +1,19 @@
+==> 001_two_sum.py <==
+def twoSum(self, nums, target):
+    """
+    :type nums: List[int]
+    :type target: int
+    :rtype: List[int]
+    """
+    nums_tups = []
+    for i, num in enumerate(nums):
+        diffs = [n[1] for n in nums_tups]
+        if num in diffs:
+            # diffs and nums are in sync
+            return [diffs.index(num), i]
+        else:
+            nums_tups.append((num, target - num))
+
 ==> 002_add_two_numbers.py <==
 #!/usr/bin/env python
 
@@ -109,6 +125,63 @@ def convert(self, s, numRows):
             mid_cycle_index = 1
     return ret_str
 
+==> 013_roman_to_int.py <==
+def romanToInt(self, s):
+    """
+    :type s: str
+    :rtype: int
+    """
+    map = {'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000}
+    num, prev = 0, 1000
+    
+    for c in s:
+        num, prev = num + map[c] - 2*prev if map[c] > prev else num + map[c], map[c]
+        
+    return num
+
+==> 020_valid_parentheses.py <==
+def isValid(self, s):
+    """
+    :type s: str
+    :rtype: bool
+    """
+    map = {'(': ')', '{': '}', '[': ']'}
+    stack = []
+    
+    for i, c in enumerate(s):
+        if c in map: 
+            stack.append(c)
+        elif c in map.values(): 
+            # Also fails if stack is empty -> too many closing parens.
+            if not stack or map[stack.pop()] != c: return False
+
+    return not stack
+
+==> 021_merge_two_sorted_lists.py <==
+def mergeTwoLists(self, l1, l2):
+    """
+    :type l1: ListNode
+    :type l2: ListNode
+    :rtype: ListNode
+    """
+    if not l1 or not l2: return l1 or l2
+    
+    c1, c2 = l1, l2
+    l3 = p = ListNode(0)
+        
+    while c1 and c2:
+        if c1.val <= c2.val:
+            p.next = c1
+            c1 = c1.next
+        else:
+            p.next = c2
+            c2 = c2.next
+        p = p.next
+        
+    p.next = c1 or c2
+    
+    return l3.next
+
 ==> 048_rotate_image.py <==
 #!/usr/bin/env python
 
@@ -142,6 +215,66 @@ def maxSubArray(self, nums):
             
     return max_so_far
 
+==> 088_merge_sorted_array.py <==
+#!/usr/bin/env python
+
+def merge(self, nums1, m, nums2, n):
+    """
+    :type nums1: List[int]
+    :type m: int
+    :type nums2: List[int]
+    :type n: int
+    :rtype: void Do not return anything, modify nums1 in-place instead.
+    """
+    i2 = 0
+    if not nums2: return
+    
+    for i, num in enumerate(nums1):
+        # Add on leftover elements.
+        if i >= m:
+            nums1[i] = nums2[i2]
+            i2 += 1
+            continue
+        if num <= nums2[i2]: 
+            continue
+        else:
+            # Swap.
+            tmp = num
+            nums1[i] = nums2[i2]
+            nums2[i2] = tmp
+            nums2.sort()
+
+==> 121_best_time_buy_sell_stock.py <==
+def maxProfit(self, prices):
+    """
+    :type prices: List[int]
+    :rtype: int
+    """
+    max_curr = 0
+    max_so_far = 0
+    for i, price in enumerate(prices[1:]):
+        # not i-1 because iterating over prices[1:] already; ie prices[i+1] = prices[1:][i]
+        max_curr = max(0, max_curr + price - prices[i])
+        max_so_far = max(max_so_far, max_curr)
+    return max_so_far
+
+==> 141_linked_list_cycle.py <==
+def hasCycle(self, head):
+    """
+    :type head: ListNode
+    :rtype: bool
+    """
+    cur1, cur2 = head, head
+    
+    while cur1 and cur2:
+        cur1 = cur1.next
+        cur2 = cur2.next
+        if cur2: cur2 = cur2.next
+        else: break
+        if cur1 == cur2: return True
+    
+    return False
+
 ==> 151_reverse_words_in_a_string.py <==
 #!/usr/bin/env python
 
@@ -155,6 +288,29 @@ return "blue is sky the".
 
 def reverseWords(self, s):
     return " ".join(s.split()[::-1])
+
+==> 168_excel_sheet_col_title.py <==
+def convertToTitle(self, n):
+    """
+    :type n: int
+    :rtype: str
+    """
+    res, caps = '', [chr(i + 65) for i in xrange(26)]
+    while n:
+        n, rem = divmod(n - 1, 26)
+        res = caps[rem] + res
+    return res
+
+==> 171_excel_sheet_col_num.py <==
+#!/usr/bin/env python
+
+def titleToNumber(self, s):
+    """
+    :type s: str
+    :rtype: int
+    """
+    # Do base 26 number math.
+    return sum([26 ** (len(s)-i-1) * (ord(c)-64) for i, c in enumerate(s)])
 
 ==> 173_binary_search_tree_iterator.py <==
 #!/usr/bin/env python
@@ -302,6 +458,28 @@ class Solution(object):
                     
         return sum(primes)
 
+==> 206_reverse_linked_list.py <==
+#!/usr/bin/env python
+
+# Recursive.
+def reverseList(self, head, prev=None):
+    if not head: return prev
+    # Reverse links, making sure to hold on to the next node.
+    curr = head.next
+    head.next = prev
+    return self.reverseList(curr, head)
+
+# Iterative.
+def reverseList(self, head):
+    if not head: return
+    prev = None
+    while head:
+        tmp = head.next
+        head.next = prev
+        prev = head
+        head = tmp
+    return prev
+
 ==> 232_queue_with_stacks.py <==
 #!/usr/bin/env python
 
@@ -367,6 +545,39 @@ def isPalindrome(self, head):
         
     return True
 
+==> 235_lca_of_bst.py <==
+#!/usr/bin/env python
+
+def lowestCommonAncestor(self, root, p, q):
+    if not root or not p or not q: return None
+    if max(p.val, q.val) < root.val: 
+        return self.lowestCommonAncestor(root.left, p, q)
+    if min(p.val, q.val) > root.val:
+        return self.lowestCommonAncestor(root.right, p, q)
+    return root
+
+==> 237_delete_node_linked_list.py <==
+def deleteNode(self, node):
+    """
+    :type node: ListNode
+    :rtype: void Do not return anything, modify node in-place instead.
+    """
+    node.val = node.next.val
+    node.next = node.next.next
+
+==> 268_missing_number.py <==
+def missingNumber(self, nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    prev = -1
+    for n in sorted(nums):
+        if n != prev + 1: return prev + 1
+        prev = n
+    
+    return prev + 1
+
 ==> 325_max_size_subarr_sum_k.py <==
 #!/usr/bin/env python
 
@@ -420,6 +631,25 @@ class TicTacToe(object):
         return (player if any(x[i] == self.n for x, i in zip((self.rows[p], self.cols[p]), (row, col)))
                             or self.d1[p] == self.n or self.d2[p] == self.n
                             else 0)
+
+==> 419_battleships_in_board.py <==
+#!/usr/bin/env python
+
+def countBattleships(self, board):
+    """
+    :type board: List[List[str]]
+    :rtype: int
+    """
+    num_ships = 0
+    
+    for r, row in enumerate(board):
+        for c, cell in enumerate(row):
+            if cell != 'X': continue
+            # Count the top-left cell of each ship.
+            if (not r or board[r-1][c] == '.') and (not c or board[r][c-1] == '.'):
+                num_ships += 1
+                
+    return num_ships
 
 ==> 445_add_two_numbers_II.py <==
 # Definition for singly-linked list.
